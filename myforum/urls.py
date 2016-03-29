@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 """myforum URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -15,9 +16,14 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.conf.urls import include
 
 admin.autodiscover()
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^article/',include("article.urls")),
+    url(r'^$', "block.views.block_list",name="block_list"),
+
 ]
+#r表示字符不转义，^是开始，$是结束
