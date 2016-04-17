@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>重大论坛</title>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+</head>
+<body>
+    <div class="container">
+       <div class="row">
+           <div class=" col-md-2">
+               &nbsp;
+           </div>
+           <div class=" col-md-8">
+               <div class="jumbotron">
+                       <div class="logotxt"><center><h1><font face="微软雅黑">重大论坛</font></h1></center>
+                       </div>
+               </div>
+               {% for b in blocks %}
+               <div class="blockItem">
+               <div class="panel panel-default">
+                   <div class="panel-heading">
+                       <a href="{% url 'article_list' b.id %}" style="font-size: 18px;">{{ b.name }}</a>
+                       <span class="pull-right">管理员：{{b.manager.username}}</span>
+                   </div>
+                   <div class="panel-body">
+                       <span style="font-size: 0.8em;">{{ b.desc }}</span>
+                   </div>
+               </div>
+
+
+               </div>
+               {% endfor %}
+
+           </div>
+           <div class=" col-md-2">
+               &nbsp;
+           </div>
+       </div>
+    </div>
+</body>
+</html>
