@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="zh_cn">
+  <meta charset="utf-8">
+  <body>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div align="center">
+      <p>
+        登陆
+      </p>
+      <form action="" method="POST" >
+      {% csrf_token %}
+        <label for="name">
+         用户名：
+        </label>
+        <input type="text"  name="name" >
+        <br>
+        <label for="name">
+          &nbsp;&nbsp;密码：
+        </label>
+        <input type="password" name="password">
+        <br>
+        <br>
+        <input type="submit" value="登陆">
+        <input type="submit" name="register" value="注册"> 
+      </form>
+    </div>
+  </body>
+</html>
