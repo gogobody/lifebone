@@ -40,3 +40,4 @@ def article_detail(request,article_id):
     article=Article.objects.get(id=article_id)
     return render_to_response("article_detail.html",{"art":article,"c":article.block},
                                       context_instance=RequestContext(request))#article字段里的
+

@@ -24,6 +24,8 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^article/',include("article.urls")),
     url(r'^$', "block.views.block_list",name="block_list"),
+    url(r'^usercenter/',include("usercenter.urls")),
+    url('^accounts/', include('django.contrib.auth.urls')),
 
 ]
 #r表示字符不转义，^是开始，$是结束

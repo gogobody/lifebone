@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'block',
     'article',
+    'usercenter',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -116,3 +117,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+#Email -config
+EMAIL_HOST = "smtp.qq.com"
+EMAIL_PORT = 25
+EMAIL_HOST_USER = "138950128@vip.qq.com"
+EMAIL_HOST_PASSWORD = "wwl814976un"
