@@ -120,5 +120,5 @@ STATIC_URL = '/static/'
 #Email -config
 EMAIL_HOST = "smtp.qq.com"
 EMAIL_PORT = 25
-EMAIL_HOST_USER = "138950128@vip.qq.com"
-EMAIL_HOST_PASSWORD = "wwl814976un"
+EMAIL_HOST_USER = "284984820@qq.com"
+EMAIL_HOST_PASSWORD = "wwl814976"
