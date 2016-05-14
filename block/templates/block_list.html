@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>重大论坛</title>
+    <title>民主湖论坛</title>
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 </head>
@@ -15,7 +15,7 @@
            </div>
            <div class=" col-md-8">
                <div class="jumbotron">
-                       <div class="logotxt"><center><h1><font face="微软雅黑">重大论坛</font></h1></center>
+                       <div class="logotxt"><center><h1><font face="微软雅黑">民主湖论坛</font></h1></center>
                        </div>
                </div>
                {% for b in blocks %}
@@ -37,8 +37,18 @@
            </div>
            <div class=" col-md-2">
                &nbsp;
-               <a href="/usercenter/register">注册</a>
-               <a href="/accounts/login">登录</a>
+
+
+               {% if user.is_authenticated %}
+          <p>{{ user.username }}. 欢迎来到论坛.</p>
+          <a href="{% url 'logout_then_login' %}">登出</a>
+               {% else %}
+           <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+               <a href="/usercenter/register">注册</a></p>
+          <p>匿名用户. 请<a href="{% url 'login' %}">登录</a>.</p>
+            {% endif %}
+            <p><a href="{% url 'password_change' %}">密码修改！</a></p>
            </div>
        </div>
     </div>

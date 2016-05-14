@@ -36,7 +36,7 @@ def register(request):
 
             activate_link = "http://%s%s"%(request.get_host(),reverse("usercenter_activate",args=[new_code]))#激活链接，域名加激活码
 
-            send_mail(u'激活邮件',u'您的激活链接为：%s'%activate_link,
+            send_mail(u'激活邮件',u'您的激活链接为：%s'%activate_link,'284984820@qq.com',
                       [email],fail_silently=False) #最后一个参数是发生错误时是否选择静默，false就是要报错
         else:
             return render_to_response('register.html',{'error':error},context_instance=RequestContext(request))
@@ -45,7 +45,7 @@ def register(request):
 
 def activate(request,code):
     query =ActivateCode.objects.filter(code=code,expire_timestamp__gte=datetime.datetime.now())#看激活码是否过期
-    if query.counts()>0:
+    if query.count()>0:
         code_record=query[0]
         code_record.owner.is_active =True
         code_record.owner.save()
