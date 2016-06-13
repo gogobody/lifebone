@@ -1,19 +1,22 @@
-#-*- coding:utf-8 -*-
-from django.shortcuts import render
-from models import Article
-from block.models import Block
-from django.shortcuts import render_to_response,redirect
-from django.template import RequestContext
-from django.contrib import messages
-from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+# coding: utf-8
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
+from django.contrib import messages
+from django.shortcuts import render_to_response, redirect
+from django.template import RequestContext
+
+from block.models import Block
+from comment.models import Comment
+from models import Article
+from utils.paginator import paginate_queryset
 
 def article_list(request,block_id):
     block_id=int(block_id)
     block = Block.objects.get(id=block_id)
-    articles=Article.objects.filter(block=block).order_by("-last_update_timestamp")
-    return render_to_response("article_list.html", {"articles":articles,"c": block},
+    articles=Article.objects.filter(block=block).order_by("last_update_timestamp")
+    page_no = int(request.GET.get("page_no", "1"))
+    (object_list, pagination_data) = paginate_queryset(articles,page_no,cnt_per_page=1)
+    return render_to_response("article_list.html", {"articles": object_list, "b": articles.block, "pagination": pagination_data},
                               context_instance=RequestContext(request))
 '''
 def create_article(request,block_id):
@@ -35,11 +38,17 @@ def create_article(request,block_id):
         messages.add_message(request,messages.INFO,"成功提交文章.")
         return redirect(reverse("article_list",args=[block.id]))#解析文章列表
 '''
-def article_detail(request,article_id):
-    article_id=int(article_id)
-    article=Article.objects.get(id=article_id)
-    return render_to_response("article_detail.html",{"art":article,"c":article.block},
-                                      context_instance=RequestContext(request))#article字段里的
+def article_detail(request, article_id):
+    page_no = int(request.GET.get("comment_page_no", "1"))
+    article_id = int(article_id)
+    article = Article.objects.get(id=article_id)
+    comments = Comment.objects.filter(article=article, status=0)
+    comments, pagination_data = paginate_queryset(comments, page_no, cnt_per_page=3)
+    return render_to_response("article_detail.html", {"article": article,
+                              "comments": comments, "pagination": pagination_data},
+                              context_instance=RequestContext(request))
+
+
 
 
 @login_required

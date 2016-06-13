@@ -8,6 +8,9 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response,redirect
 from models import ActivateCode
 from django.template import RequestContext
+from myforum.settings import STORAGE_PATH, USERRES_URLBASE
+from models import ActivateCode, UserProfile
+from django.contrib.auth.decorators import login_required
 
 def register(request):
     error=''
@@ -52,3 +55,24 @@ def activate(request,code):
         return HttpResponse(u'激活成功')
     else:
         return HttpResponse(u'激活失败')
+
+@login_required
+def upload_avatar(request):
+    profile = UserProfile.objects.get(owner=request.user)
+    if request.method == "GET":
+        return render_to_response("usercenter_uploadavatar.html", {"error": "", "profile": profile},
+                                  context_instance=RequestContext(request))
+    else:
+        avatar_file = request.FILES.get("avatar", None)
+        if not avatar_file:
+            return render_to_response("usercenter_uploadavatar.html", {"error": u"请上传一个文件", "profile": profile},
+                                      context_instance=RequestContext(request))
+        file_path = os.path.join(STORAGE_PATH, avatar_file.name)
+        with open(file_path, 'wb+') as destination:
+            for chunk in avatar_file.chunks():
+                destination.write(chunk)
+        url = "%s/avatar/%s" % (USERRES_URLBASE, avatar_file.name)
+        profile.avatar = url
+        profile.save()
+        return redirect(reverse("block_list"))
+

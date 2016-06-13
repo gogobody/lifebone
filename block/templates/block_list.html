@@ -40,6 +40,13 @@
 
 
                {% if user.is_authenticated %}
+                    {% if user_avatar %}
+                    <a href="{% url 'upload_avatar' %}" class="thumbnail">
+                      <img src="{{ user_avatar }}" alt="未设置头像">
+                    </a>
+                    {% else%}
+                    <a href="{% url 'upload_avatar' %}" class="btn btn-primary">上传头像</a>
+                    {% endif %}
           <p>{{ user.username }}. 欢迎来到论坛.</p>
           <a href="{% url 'logout_then_login' %}">登出</a>
                {% else %}

@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.db import models
 from block.models import Block
+from usercenter.models import UserProfile
 # Create your models here.
 class Article(models.Model):
     block = models.ForeignKey(Block, verbose_name="所属版块")
@@ -15,6 +16,9 @@ class Article(models.Model):
     create_timestamp = models.DateTimeField(auto_now_add=True)
     last_update_timestamp = models.DateTimeField(auto_now=True)
 
+    @property
+    def author_avatar(self):
+        return UserProfile.objects.get(owner=self.owner).avatar
     def __unicode__(self):
         return self.title
 

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+  <div class="col-sm-12">
+    <ul class="list-group">
+      {% for msg in unread_messages %}
+      <li class="list-group-item"><a href="{% url 'read_message' msg.id %}">{{ msg.content }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

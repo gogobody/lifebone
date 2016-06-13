@@ -1,33 +1,123 @@
 {% extends "base.html" %}
 {% block content %}
-
 <div class="row">
-	<div class=" col-md-2">
-		&nbsp;
-	</div>
-	<div class=" col-md-8">
-		<ol class="breadcrumb">
-			<li><a href="{% url 'block_list' %}">首页</a></li>
-			<li><a class="active" href="{% url 'article_list' c.id %}">{{c.name}}</a></li>
-            <li class="active">{{art.title}}</li>
-		</ol>
-
-
-		<table class="table table-hover">
-
-			<tr>
-				<th>标题</th>
-				<th>内容</th>
-			</tr>
-
-			<tr>
-				<td>{{art.title}}</td>
-                <td>{{art.content}}</td>
-
-			</tr>
-
-		</table>
-	</div>
+  <div class="col-sm-12">
+    <ol class="breadcrumb">
+      <li><a href="{% url 'block_list' %}">首页</a></li>
+      <li><a href="{% url 'article_list' article.block.id %}">{{ article.block.name }}</a></li>
+      <li class="active">{{ article.title }}</li>
+    </ol>
+  </div>
 </div>
+<div class="row">
+  <div class="col-sm-12">
+    <table class="table table-bordered mainTable">
+      <tr>
+        <td class="author">
+          {% if article.author_avatar %}
+          <a href="javascript: void(0)" class="thumbnail">
+            <img src="{{ article.author_avatar }}" alt="未设置头像">
+          </a>
+          {% endif %}
+          <center>作者：{{ article.owner.username }}<center>
+        </td>
+        <td class="content">
+          <h6>发表于：{{ article.create_timestamp|date:"Y-m-d P" }}</h6>
+          <h4>标题：{{ article.title }}</h4>
+          {% autoescape off %}
+          <div> {{ article.content }} </div>
+          {% endautoescape %}
+        </td>
+      </tr>
+      {% for comment in comments %}
+      <tr {% if forloop.last %}id="lastComment"{% endif %}>
+        <td class="author">
+          {% if comment.author_avatar %}
+          <a href="javascript: void(0)" class="thumbnail">
+            <img src="{{ comment.author_avatar }}" alt="未设置头像">
+          </a>
+          {% endif %}
+          <center>作者：{{ comment.owner.username }}<center>
+        </td>
+        <td class="content">
+          {% with comment.to_comment as to_comment %}
+            {% if to_comment %}
+            <blockquote>
+              <b>{{ to_comment.owner.username }}:</b>
+              <br />
+              {{ to_comment.content|linebreaksbr }}
+            </blockquote>
+            {% endif %}
+            <h6>发表于：{{ comment.create_timestamp|date:"Y-m-d P" }}</h6>
+            <a href="#commentContent" class="btn btn-primary pull-right subCommentBtn" data-comment-id="{{ comment.id }}" data-owner="{{ comment.owner.username }}">回复</a>
+            <div> {{ comment.content|linebreaksbr }} </div>
+          {% endwith %}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% include "component/paginator.html" with param_name="comment_page_no" %}
+    {% if user.is_authenticated %}
+    <table class="table mainTable">
+      <tr>
+        <td class="author">
+          <br />
+          <center>作者：{{ user.username }}<center>
+        </td>
+        <td class="content">
+          <textarea class="form-control" id="commentContent" rows="3"></textarea>
+          <br />
+          <button class="btn btn-primary" id="commentBtn">发表评论</button>
+          <br />
+          <br />
+        </td>
+      </tr>
+    </table>
+    {% endif %}
+  </div>
+</div>
+<style type="text/css">
+.mainTable td.author {
+  width: 10%;
+}
+.mainTable td.content {
+  width: 87%;
+}
+blockquote {
+  font-size: 13px;
+}
+img {
+    max-width: 200px;
+    max-height: 200px;
+}
+</style>
+<script type="text/javascript" src="/static/lib/jquery/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="/static/lib/jquery/jquery.csrf.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+  if (window.location.href.indexOf("goLast") > 0) {
+    window.location.href = window.location.href + "#lastComment";
+  }
+  var article_id = {{ article.id }};
+  var page_cnt = {{ pagination.page_cnt }};
+  var to_comment_id = 0;
 
+  $("#commentBtn").click(function () {
+    var comment = $("#commentContent").val();
+    var param = {"article_id": article_id, "to_comment_id": to_comment_id, "content": comment};
+    $.post("{% url 'create_comment' %}", param, function () {
+      $("#commentContent").val("");
+      to_comment_id = 0;
+      window.location.href = "{% url 'article_detail' article.id %}?comment_page_no=" + (page_cnt + 1) + "&goLast=1";
+    });
+  })
+  $(".subCommentBtn").click(function (e) {
+    var btn = $(e.target);
+    to_comment_id = parseInt(btn.attr("data-comment-id"));
+    $("#commentContent").attr("placeholder", "回复：" + btn.attr("data-owner"));
+    $("#commentContent").focus();
+    return false;
+  })
+});
+</script>
 {% endblock %}

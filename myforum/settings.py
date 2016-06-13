@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'block',
     'article',
     'usercenter',
+    'message',
+    'comment',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -127,4 +129,8 @@ EMAIL_PORT = 465
 DEFAULT_FROM_EMAIL = "284984820@qq.com"
 
 #login-config
-LOGIN_URL='/accounts/login/?next="/"'
+#LOGIN_URL='/accounts/login/?next="/"'
+
+#media
+STORAGE_PATH = "D:\myPython\django\lifebone\avatar"
+USERRES_URLBASE = "http://mine.nevermore.com"
