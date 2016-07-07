@@ -16,7 +16,7 @@ def article_list(request,block_id):
     articles=Article.objects.filter(block=block).order_by("last_update_timestamp")
     page_no = int(request.GET.get("page_no", "1"))
     (object_list, pagination_data) = paginate_queryset(articles,page_no,cnt_per_page=1)
-    return render_to_response("article_list.html", {"articles": object_list, "b": articles.block, "pagination": pagination_data},
+    return render_to_response("article_list.html", {"articles": object_list, "b": block, "pagination": pagination_data},
                               context_instance=RequestContext(request))
 '''
 def create_article(request,block_id):
@@ -47,8 +47,6 @@ def article_detail(request, article_id):
     return render_to_response("article_detail.html", {"article": article,
                               "comments": comments, "pagination": pagination_data},
                               context_instance=RequestContext(request))
-
-
 
 
 @login_required

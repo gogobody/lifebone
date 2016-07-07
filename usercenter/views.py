@@ -11,6 +11,7 @@ from django.template import RequestContext
 from myforum.settings import STORAGE_PATH, USERRES_URLBASE
 from models import ActivateCode, UserProfile
 from django.contrib.auth.decorators import login_required
+import os
 
 def register(request):
     error=''
@@ -31,6 +32,9 @@ def register(request):
             user=User.objects.create_user(username=username,email=email,password=password)
             user.is_active =False
             user.save()
+
+            profile = UserProfile(owner=user,avatar = "")
+            profile.save()
 
             new_code = str(uuid.uuid4()).replace("-","")
             expire_time = datetime.datetime.now()+datetime.timedelta(days=2)#过期时间=当前时间加2天
@@ -67,11 +71,12 @@ def upload_avatar(request):
         if not avatar_file:
             return render_to_response("usercenter_uploadavatar.html", {"error": u"请上传一个文件", "profile": profile},
                                       context_instance=RequestContext(request))
-        file_path = os.path.join(STORAGE_PATH, avatar_file.name)
+        #file_path = os.path.join(STORAGE_PATH,str(request.user))+"/"+avatar_file.name
+        file_path = STORAGE_PATH + str(request.user) + avatar_file.name
         with open(file_path, 'wb+') as destination:
             for chunk in avatar_file.chunks():
                 destination.write(chunk)
-        url = "%s/avatar/%s" % (USERRES_URLBASE, avatar_file.name)
+        url = "%s/%s" % (USERRES_URLBASE, avatar_file.name)
         profile.avatar = url
         profile.save()
         return redirect(reverse("block_list"))

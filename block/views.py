@@ -10,7 +10,10 @@ from models import Block
 def block_list(request):
     if request.user.is_authenticated():
         msg_cnt = UserMessage.objects.filter(owner=request.user, status=0).count()
-        user_avatar = UserProfile.objects.get(owner=request.user).avatar
+        try:
+            user_avatar = UserProfile.objects.get(owner=request.user).avatar
+        except:
+            user_avatar=''
     else:
         msg_cnt = 0
         user_avatar = ""

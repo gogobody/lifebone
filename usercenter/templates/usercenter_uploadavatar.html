@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    {% if  error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+     &nbsp;
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <b>{% if profile.avatar %}更改头像{% else %}上传头像{% endif %}</b>
+        </div>
+        <div class="panel-body">
+          <form method="post" action="{% url 'upload_avatar' %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input name="avatar" type="file" />
+          <br />
+          <input type="submit" class="btn btn-primary" value="上传" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+     &nbsp;
+    </div>
+  </div>
+</div>
+{% endblock %}

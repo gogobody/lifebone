@@ -59,7 +59,7 @@ ROOT_URLCONF = 'myforum.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "templates")],  # 模板继承路径，base是指当前lifebone文件夹
+        'DIRS': [os.path.join(BASE_DIR, "templates"),],  # 模板继承路径，base是指当前lifebone文件夹
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -105,7 +105,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
-LANGUAGE_CODE = 'zh-CN'
+LANGUAGE_CODE = 'zh-Hans'
 
 TIME_ZONE = 'UTC'
 
@@ -122,7 +122,7 @@ STATIC_URL = '/static/'
 
 #Email -config
 EMAIL_HOST_USER = "284984820@qq.com"
-EMAIL_HOST_PASSWORD = "dzwzeemtznrbcaja"
+EMAIL_HOST_PASSWORD = "iwdohfwyqvzsbjhc"
 EMAIL_USE_SSL = True
 EMAIL_HOST = "smtp.qq.com"
 EMAIL_PORT = 465
@@ -130,7 +130,8 @@ DEFAULT_FROM_EMAIL = "284984820@qq.com"
 
 #login-config
 #LOGIN_URL='/accounts/login/?next="/"'
+LOGIN_REDIRECT_URL = '/'
 
 #media
-STORAGE_PATH = "D:\myPython\django\lifebone\avatar"
+STORAGE_PATH = "D:/myPython/django/lifebone/avatar/"
 USERRES_URLBASE = "http://mine.nevermore.com"
